@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ezen.mybatisdemo.domain.ProductDAO">
+    <select id="getList" resultType="map">
+        select pno, pname, kind, price,
+        DATE_FORMAT(in_date, '%y-%m-%d') as in_date,
+        DATE_FORMAT(up_date, '%y-%m-%d') as up_date
+        from product
+    </select>
+
+    <delete id="prodDel">
+        delete from product
+        where pno = CAST(#{pno} AS SIGNED)
+    </delete>
+
+    <!--cast as signed = 없어도 동작은 함. 부호없는 integer형태로 바꿔주겠다는 뜻-->
+
+    <select id="getListOne" resultType="map">
+        select pno, pname, kind, price,
+        DATE_FORMAT(in_date, '%y-%m-%d') as in_date,
+        DATE_FORMAT(up_date, '%y-%m-%d') as up_date
+        from product
+        where pno = CAST(#{pno} AS SIGNED)
+    </select>
+
+    <update id="prodModify">
+        update product set pname = #{pname},
+        kind = #{kind}, price = #{price}
+        where pno = CAST(#{pno} AS SIGNED)
+    </update>
+
+    <insert id="prodRegister">
+        insert into product(pname, kind, price)
+        values(#{pname}, #{kind}, #{price})
+    </insert>
+
+    <select id="prodSearch" resultType="map">
+        select pno, pname, kind, price,
+        DATE_FORMAT(in_date, '%y-%m-%d') as in_date,
+        DATE_FORMAT(up_date, '%y-%m-%d') as up_date
+        from product
+        where 1=1
+        <if test="pname != 'all'">
+        and pname like concat('%', #{pname}, '%')
+    </if>
+        <if test ="kind != 'all'">
+            and kind = #{kind}
+        </if>
+    </select>
+    <!--1=1은 무조건 참이다 -->
+
+    <delete id="prodsDelete" >
+        delete from product
+        <!--where pno in (3, 4, 5...)-->
+        <where>
+             <foreach item="sakje" index="idx" collection="chkList" open="pno in (" separator="," close=")">
+             #{sakje}
+             </foreach>
+        </where>
+    </delete>
+
+    <!--선택상품 가격 수정-->
+   <!-- <update id="modifyPrice">
+        update product set price = CAST(#{price} AS SIGNED)
+        where pno = CAST(#{pno} AS SIGNED)
+    </update>-->
+    <!--선택상품 가격 일괄수정-->
+    <update id="modifyPriceOne">
+        update product set price = CAST(#{price} AS SIGNED)
+        <where>
+            <foreach item="soojung" index="idx" collection="chkList" open="pno in (" separator="," close=")">
+                #{soojung}
+            </foreach>
+        </where>
+    </update>
+
+    <!--  로그 남기기  -->
+    <!--<insert id="insertLog">
+        insert into product_log(pno, price)
+        values(#{pno}, CAST(#{price} AS SIGNED))
+    </insert>-->
+    <!-- 로그 한번에 남기기 -->
+    <insert id="insertLogOne">
+        insert into product_log(pno, price)
+        <foreach item="logger" index="idx" collection="chkList" separator="union all">
+            select #{logger}, CAST(#{price} AS SIGNED) from dual
+        </foreach>
+    </insert>
+
+</mapper>
