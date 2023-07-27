@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<!--  헤더 영역  -->
+
+<th:block th:replace="/inc/header :: headerFragment"></th:block>
+
+<!--   컨텐츠 영역   -->
+<body>
+<div class="container mt-5 d-flex">
+  <form action="/member/memberUpdate" method="post">
+    <p>아이디 : </p><p><input class="form-control" type="text" id="memberID" name="memberID" th:value="${dto.memberID}" readonly></p>
+    <p>회원명 : </p><p><input class="form-control" type="text" id="memberName" name="memberName" th:value="${dto.memberName}"></p>
+    <p>비밀번호 : </p><p><input class="form-control" type="text" id="memberPw" name="memberPw" th:value="${dto.memberPw}"></p>
+    <p>생일 : </p><p><input class="form-control" type="date" id="birthDay" name="birthDay" th:value="${dto.birthDay}"></p>
+    <p>성별 : </p><p><select class="form-control" id="memberGender" name="memberGender" >
+    <option value="남성" th:selected="${dto.memberGender}=='남성'">남성</option>
+    <option value="여성" th:selected="${dto.memberGender}=='여성'">여성</option>
+  </select></p>
+
+    <p>이메일 : </p><p><input class="form-control" type="text" id="memberEmail" name="memberEmail" th:value="${dto.memberEmail}"></p>
+
+    <p><input class="btn btn-success" type="submit" value="수정하기"></p>
+  </form>
+
+</div>
+</body>
+
+<!--  푸터 영역  -->
+
+<th:block th:replace="/inc/footer :: footerFragment"></th:block>
+</html>

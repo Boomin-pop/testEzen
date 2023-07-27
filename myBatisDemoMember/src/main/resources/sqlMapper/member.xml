@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.ezen.mybatisdemo.domain.MemberDAO">
+
+    <select id="memberList" resultType="kr.ezen.mybatisdemo.domain.MemberDTO">
+        select memberNum, memberID, memberName, memberPw, birthDay, memberGender, memberEmail
+<!--        DATE_FORMAT(birthDay, '%Y-%m-%d') as -->
+
+        from batis_Member
+    </select>
+
+    <select id="memberSearch" resultType="kr.ezen.mybatisdemo.domain.MemberDTO">
+        select memberNum, memberID, memberName, memberPw, birthDay, memberGender, memberEmail
+        from batis_Member
+        where 1=1
+        <if test="memberName != 'all'">
+            and memberName like concat('%', #{memberName}, '%')
+        </if>
+        <if test ="memberGender != 'all'">
+            and memberGender = #{memberGender}
+        </if>
+    </select>
+
+    <select id="memberInfo" resultType="kr.ezen.mybatisdemo.domain.MemberDTO">
+        select memberNum, memberID, memberName, memberPw, birthDay, memberGender, memberEmail
+        <!--DATE_FORMAT(birthDay, '%y-%m-%d') as-->
+        from batis_Member
+        where memberNum = CAST(#{memberNum} AS SIGNED)
+    </select>
+
+    <update id="memberUpdate">
+        update batis_Member set memberName = #{memberName}, memberPw = #{memberPw}, birthDay = #{birthDay},
+        memberGender = #{memberGender}, memberEmail = #{memberEmail}
+        where memberNum = CAST(#{memberNum} AS SIGNED)
+    </update>
+
+    <insert id="memberRegister">
+        insert into batis_Member(memberID, memberName, memberPw, birthDay, memberGender, memberEmail)
+        values(#{memberID}, #{memberName}, #{memberPw}, #{birthDay}, #{memberGender}, #{memberEmail})
+    </insert>
+
+    <delete id="memberDel">
+        delete from batis_Member
+        where memberNum = CAST(#{memberNum} AS SIGNED)
+    </delete>
+
+
+
+
+</mapper>

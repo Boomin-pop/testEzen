@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<!--  헤더 영역  -->
+
+<th:block th:replace="/inc/header :: headerFragment"></th:block>
+
+<!--   컨텐츠 영역   -->
+<body>
+<div class="container">
+  <h3 class="mt-3">회원 리스트</h3>
+  <form action="/member/search" method="post">
+    <input type="text" id="memberName", name="memberName" placeholder="회원 이름">
+    <select id="memberGender", name="memberGender">
+      <option value="all">전체</option>
+      <!--<option value="도서" th:selected="${map.get('kind')}=='도서'">도서</option>
+      <option value="생활가전" th:selected="${map.get('kind')}=='생활가전'">생활가전</option>-->
+      <option value="남성">남성</option>
+      <option value="여성">여성</option>
+    </select>
+    <input type="submit" value="회원 검색">
+
+  </form>
+  <!--<form id="frmTable" action="product/prodsDelete" method="post">-->
+ <!-- <form id="frmTable" action="member/prodsModify" method="post">-->
+    <table class="table">
+      <thead>
+      <tr style="text-align:center;">
+        <th>선택</th>
+        <th>회원번호</th>
+        <th>회원아이디</th>
+        <th>회원이름</th>
+        <th>비밀번호</th>
+        <th>생일</th>
+        <th>성별</th>
+        <th>이메일</th>
+        <th>수정</th>
+        <th>삭제</th>
+      </tr>
+      </thead>
+      <tbody>
+      <th:block th:each="member : ${list}">
+        <tr style="text-align:center;">
+
+          <!--map의 get()을 이용하면 pno를 no로 고쳐도 에러가 안뜨고 그냥 no자리에 공백만 뜸-->
+       <!--   <td><input type="checkbox" name="chkmNo" th:value="${member.get('memberNum')}"></td>
+          <td th:text="${member.get('memberNum')}"></td>
+          <td th:text="${member.get('memberID')}"></td>
+          <td th:text="${member.get('memberName')}"></td>
+          <td th:text="${member.get('memberPw')}"></td>
+          <td th:date="${member.get('birthDay')}"></td>
+          <td th:text="${member.get('memberGender')}"></td>
+          <td th:text="${member.get('memberEmail')}"></td>
+
+          <td><a class="btn btn-info btn-sm" th:href="@{/member/memberInfo(memberNum=${member.get('memberNum')})}">수정</a></td>
+          <td><a class="btn btn-danger btn-sm" th:href="@{/member/memberDel(memberNum=${member.get('memberNum')})}">삭제</a></td>-->
+
+          <td><input type="checkbox" name="chkmNo" th:value="${member.memberNum}"></td>
+          <td th:text="${member.memberNum}"></td>
+          <td><a th:href="@{/member/memberInfo(memberNum=${member.memberNum})}" th:text="${member.memberID}" style="text-decoration:none; font-weight:bolder;"></a></td>
+          <td th:text="${member.memberName}"></td>
+          <td th:text="${member.memberPw}"></td>
+          <td th:text="${member.birthDay}"></td>
+          <td th:text="${member.memberGender}"></td>
+          <td th:text="${member.memberEmail}"></td>
+
+          <td><a class="btn btn-info btn-sm" th:href="@{/member/memberInfo(memberNum=${member.memberNum})}">수정</a></td>
+          <td><a class="btn btn-danger btn-sm" th:href="@{/member/memberDel(memberNum=${member.memberNum})}">삭제</a></td>
+        </tr>
+      </th:block>
+      </tbody>
+    </table>
+   <!-- <input type="hidden" name="zzena">-->
+<!--  </form>-->
+
+</div>
+<div class="container ms-auto">
+  <button class="btn btn-primary"><a href="/member/memberRegister" style="color:white;">회원 등록</a></button>
+  <button class="btn btn-danger" type="button" onclick="onDelete()">선택삭제</button>
+<!--  <button class="btn btn-secondary" type="button" onclick="onModify()">선택수정</button>-->
+</div>
+</body>
+
+<!--  푸터 영역  -->
+
+<th:block th:replace="/inc/footer :: footerFragment"></th:block>
+<script>
+  let frm = document.getElementById("frmTable");  //둘 다 쓰므로 전역변수로 뺏음.
+/*  function onModify() {
+    let zzena = prompt("가격을 입력하세요");
+    /!*  frm.setAttribute("action", "product/prodsModify");
+      let cnt = 0;
+      for (let chk of chkBoxes) {
+      }*!/
+    if (zzena == undefined){
+      return;
+    }else if(zzena == ""){
+      alert("가격을 입력하세요!");
+      onModify();     //재귀호출. 자기가 자신을 다시 호출함
+    }else if(zzena != ""){
+      // 입력받은 값을 어딘가 저장해서 controller로 넘겨야 함 = hidden input안에 넣기
+      frm.zzena.value=zzena;
+      frm.submit();
+    }
+
+    frm.submit();
+  }*/
+  function onDelete() {
+    let chkBoxes = document.getElementsByName("chkmNo");
+    frm.setAttribute("action", "member/memsDelete");
+
+    let cnt = 0;
+    for (let chk of chkBoxes) {
+      if (chk.checked) { // 체크되어 있으면 true, 아니면 false 리턴
+        cnt++;
+      }
+    }
+    if (cnt == 0) {
+      alert("삭제할 회원정보를 체크하세요!!");
+      return;
+    }
+    frm.submit();
+  }
+
+
+</script>
+</body>
+</html>

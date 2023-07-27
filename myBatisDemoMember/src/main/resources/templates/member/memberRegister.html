@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<!--  헤더 영역  -->
+
+<th:block th:replace="/inc/header :: headerFragment"></th:block>
+
+<!--   컨텐츠 영역   -->
+<body>
+<div class="container w-50 mt-5">
+  <p><h3>회원 등록</h3></p>
+  <br>
+  <br>
+  <form action="/member/memberRegister" method="post">
+    <p>아이디 : </p><p><input class="form-control" type="text" id="memberID" name="memberID"></p>
+    <p>회원명 : </p><p><input class="form-control" type="text" id="memberName" name="memberName"></p>
+    <p>비밀번호 : </p><p><input class="form-control" type="text" id="memberPw" name="memberPw"></p>
+    <p>생일 : </p><p><input class="form-control" type="date" id="birthDay" name="birthDay"></p>
+
+    <p>성별 : </p><p><select class="form-control" id="memberGender" name="memberGender">
+    <option value="남성">남성</option>
+    <option value="여성">여성</option>
+  </select></p>
+    <p>이메일 : </p><p><input class="form-control" type="text" id="memberEmail" name="memberEmail"></p>
+    <p><input class="btn btn-primary" type="submit" value="회원 등록"></p>
+  </form>
+
+</div>
+</body>
+
+<!--  푸터 영역  -->
+
+<th:block th:replace="/inc/footer :: footerFragment"></th:block>
+</html>
